@@ -1,0 +1,88 @@
+#define ALE 10
+#define START 11
+#define EOC 12
+#define OE 13
+#define ADC_CLK 9
+
+#define ADD_A A1
+#define ADD_B A2
+#define ADD_C A3
+
+int dataPins[8] = {2,3,4,5,6,7,8,A0};
+
+void setup() {
+
+  Serial.begin(9600);
+
+  pinMode(ALE, OUTPUT);
+  pinMode(START, OUTPUT);
+  pinMode(OE, OUTPUT);
+  pinMode(EOC, INPUT);
+
+  pinMode(ADD_A, OUTPUT);
+  pinMode(ADD_B, OUTPUT);
+  pinMode(ADD_C, OUTPUT);
+
+  for(int i=0; i<8; i++) {
+    pinMode(dataPins[i], INPUT);
+  }
+
+  // Select channel IN0
+  digitalWrite(ADD_A, LOW);
+  digitalWrite(ADD_B, LOW);
+  digitalWrite(ADD_C, LOW);
+
+  // Generate clock on D9
+  pinMode(ADC_CLK, OUTPUT);
+
+  TCCR1A = _BV(COM1A0);
+  TCCR1B = _BV(WGM12) | _BV(CS10);
+  OCR1A = 7;
+}
+
+void loop() {
+
+  // Latch address
+  digitalWrite(ALE, HIGH);
+  delayMicroseconds(50);
+  digitalWrite(ALE, LOW);
+
+  // Start conversion
+  digitalWrite(START, HIGH);
+  delayMicroseconds(50);
+  digitalWrite(START, LOW);
+
+  // Wait for conversion complete
+  while(digitalRead(EOC) == LOW);
+
+  // Enable output
+  digitalWrite(OE, HIGH);
+
+  int value = 0;
+
+  // Read 8-bit ADC data
+  for(int i=0; i<8; i++) {
+    value |= digitalRead(dataPins[i]) << i;
+  }
+
+  digitalWrite(OE, LOW);
+
+  // Convert to voltage
+  float voltage = (value * 5.0) / 255.0;
+
+  // LM35 temperature
+  float temperature = voltage * 100.0;
+
+  Serial.print("ADC Value: ");
+  Serial.print(value);
+
+  Serial.print(" | Voltage: ");
+  Serial.print(voltage);
+
+  Serial.print(" V | Temperature: ");
+  Serial.print(temperature);
+
+  Serial.println(" C");
+
+  delay(500);
+}

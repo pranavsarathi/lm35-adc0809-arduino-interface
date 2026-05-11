@@ -1,0 +1,72 @@
+USING ADC TO CONVERT ANALOG OUTPUT OF LM35 (TEMPERATURE SENSOR) TO DIGITAL OUTPUT
+
+ 
+ Components Required:-
+
+1]  Arduino UNO - Main Controller
+2] ADC0809CCN Mixed Peripheral IC - To convert digital signals
+3] LM35 Temperature Sensor - Key Module
+4] Jumper Wires - Used to Connect two interface
+5] USB Cable - Used to program the microcontroller
+6] Breadboard - To connect wires on ADC
+
+ Working Principle:-
+
+1. LM35 senses temperature and produces analog voltage.
+2. ADC0809 converts the analog voltage into 8-bit digital data (Parallel Bus Interface).
+3. Arduino UNO controls the ADC conversion process.
+4. Converted digital temperature data is displayed in Serial Monitor.
+
+
+ Connection Mapping :-
+
+ Note :- Keep a common Ground and Common 5V on breadboard.
+   
+LM35 Connections:-
+ Pin 1 - Arduino 5V 
+ Pin 2 - ADC0809 IN0 (Pin 26) 
+ Pin 3 - Arduino GND 
+
+
+ADC0809 Power Pin Connections:-
+
+ Pin 11 (VCC) -     Arduino 5V 
+ Pin 13 (GND) -     Arduino GND 
+ Pin 12 (VREF+) -   Arduino 5V 
+ Pin 16 (VREF-) -   Arduino GND 
+
+
+
+ADC0809 Address Pins Connections:-
+
+ Pin 25 (ADD A) - A1 
+ Pin 24 (ADD B) - A2 
+ Pin 23 (ADD C) - A3 
+
+
+ ADC0809 Control Pins :-
+
+ Pin 22 (ALERT)-   D10 
+ Pin 6  (START)-   D11 
+ Pin 7  (EOC) -     D12 
+ Pin 9  (OE)  -      D13 
+Pin 10  (CLOCK)-  D9 
+
+ ADC0809 Data Pin Connection :-
+ 
+Pin 17   -  D2  
+Pin 21   -  D3     
+Pin 20   -  D4   
+Pin 19   -  D5    
+Pin 18   -  D6    
+Pin 8    -  D7       
+Pin 15   -  D8        
+Pin 14   -  A0
+
+
+Output :-
+
+Example Serial Monitor Output:
+
+```text
+ADC Value: 15 | Voltage: 0.29 V | Temperature: 29.4 C
